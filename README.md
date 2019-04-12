@@ -1,2 +1,0 @@
-# BlazorPseudo
-Blazor Pseudo
