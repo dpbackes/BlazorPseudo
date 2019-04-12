@@ -1,0 +1,81 @@
+﻿@page "/"
+
+@using System.Text.RegularExpressions
+<div class="card">
+    <div class="card-header">Source</div>
+    <div class="card-body">
+        <textarea placeholder="Text to convert here" class="form-control" cols="40" rows="5"
+                  bind-value-oninput="@UserInputText"></textarea>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Pseduo Text
+        </div>
+        <div class="card-body">
+            <textarea id="pseudoTarget" class="form-control" readonly bind="@pseudoText"></textarea>
+        </div>
+    </div>
+</div>
+
+
+@functions {
+
+    private string userInputText = string.Empty;
+    private string pseudoText = string.Empty;
+    public string UserInputText
+    {
+        get
+        {
+            return userInputText;
+        }
+        set
+        {
+            userInputText = value;
+            ConvertAndUpdate();
+        }
+    }
+
+    void ConvertAndUpdate()
+    {
+        pseudoText = ToPseudoString(userInputText);
+    }
+
+    private static string ToPseudoString(string value)
+    {
+        if (Regex.IsMatch(value, "^\\d+$"))
+        {
+            return value;
+        }
+
+        value = value.Replace("j", "ĵ");
+        value = value.Replace("k", "ķ");
+        value = value.Replace("m", "ӎ");
+        value = value.Replace("n", "ñ");
+        value = value.Replace("o", "ø");
+        value = value.Replace("p", "þ");
+        value = value.Replace("q", "φ");
+        value = value.Replace("r", "ř");
+        value = value.Replace("s", "š");
+        value = value.Replace("t", "ţ");
+        value = value.Replace("u", "ü");
+        value = value.Replace("v", "ѵ");
+        value = value.Replace("w", "ŵ");
+        value = value.Replace("x", "χ");
+        value = value.Replace("y", "ý");
+        value = value.Replace("z", "ż");
+
+        var startIndex = 0;
+        while (startIndex < value.Length)
+        {
+            value = value.Insert(startIndex, "~");
+            startIndex += 5;
+        }
+
+        value = value.Replace("~{", "{");
+        value = value.Replace("{~", "{");
+        value = value.Replace("~}", "}");
+        value = value.Replace("\\~n", "\\n");
+        return value;
+    }
+}
+
